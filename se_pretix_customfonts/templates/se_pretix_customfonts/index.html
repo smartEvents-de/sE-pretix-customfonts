@@ -1,0 +1,92 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% block title %}Schriften{% endblock %}
+{% block content %}
+    <h1>Eigene Schriften</h1>
+    <p class="help-block">
+        Hier installierte Schriften erscheinen in allen Events als Schriftart (Shop-Design, Tickets, Badges, Rechnungen).
+        Hochladen kann man TTF, OTF, WOFF, WOFF2 oder eine ZIP-Datei mit mehreren Schnitten.
+        pretix kennt je Familie nur Regular/Bold/Italic/Bold&nbsp;Italic; andere Gewichte (Light, Semibold, …)
+        werden deshalb als eigene Familie angelegt, z.&nbsp;B. „Titillium Light“.
+    </p>
+
+    {% for w in warnings %}
+        <div class="alert alert-warning"><strong>Kompatibilität:</strong> {{ w }}</div>
+    {% empty %}
+        <p class="text-success"><span class="fa fa-check"></span> Kompatibilitätsprüfung: alle pretix-Anbindungen aktiv.</p>
+    {% endfor %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Schriften hochladen</h3></div>
+        <div class="panel-body">
+            <form method="post" enctype="multipart/form-data" class="form-horizontal">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="upload">
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="fonts">Dateien</label>
+                    <div class="col-md-9">
+                        <input type="file" id="fonts" name="fonts" multiple required accept=".ttf,.otf,.woff,.woff2,.zip">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="family_override">Familienname (optional)</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" id="family_override" name="family_override" maxlength="60">
+                        <div class="help-block">Nur nötig, wenn die Namen in den Dateien unbrauchbar sind. Sonst leer lassen.</div>
+                    </div>
+                </div>
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save"><span class="fa fa-upload"></span> Installieren</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if results %}
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Ergebnis des Uploads</h3></div>
+        <table class="table table-condensed">
+            <thead><tr><th>Datei</th><th>Familie</th><th>Stil</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for r in results %}
+                <tr class="{% if r.ok %}success{% else %}warning{% endif %}">
+                    <td>{{ r.filename }}</td><td>{{ r.family }}</td><td>{{ r.style }}</td><td>{{ r.message }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">Installierte Schriften</h3></div>
+        {% if families %}
+        <table class="table">
+            <thead><tr><th>Familie</th><th>Schnitte</th><th></th></tr></thead>
+            <tbody>
+            {% for f in families %}
+                <tr>
+                    <td><strong>{{ f.name }}</strong></td>
+                    <td>
+                        {% for s in f.styles %}
+                            <span class="label label-{% if s.present %}success{% else %}default{% endif %}">{{ s.label }}</span>
+                        {% endfor %}
+                        {% if f.missing %}<div class="help-block">Fehlende Schnitte fallen auf Open Sans zurück.</div>{% endif %}
+                    </td>
+                    <td class="text-right">
+                        <form method="post" onsubmit="return confirm('Familie „{{ f.name|escapejs }}“ wirklich löschen?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="family" value="{{ f.name }}">
+                            <button class="btn btn-danger btn-xs"><span class="fa fa-trash"></span> Löschen</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <div class="panel-body"><em>Noch keine Schriften installiert.</em></div>
+        {% endif %}
+    </div>
+{% endblock %}

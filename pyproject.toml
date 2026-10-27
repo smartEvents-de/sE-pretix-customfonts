@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "se-pretix-customfonts"
+dynamic = ["version"]
+description = "Globale Schrift-Verwaltung (Upload im Admin-Bereich) für pretix"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "AGPL-3.0-or-later" }
+authors = [{ name = "sE-pretix" }]
+dependencies = ["fonttools>=4.40", "brotli"]
+
+[project.entry-points."pretix.plugin"]
+se_pretix_customfonts = "se_pretix_customfonts:PretixPluginMeta"
+
+[tool.setuptools.dynamic]
+version = {attr = "se_pretix_customfonts.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["se_pretix_customfonts*"]
+
+[tool.setuptools.package-data]
+se_pretix_customfonts = ["templates/**/*.html"]
