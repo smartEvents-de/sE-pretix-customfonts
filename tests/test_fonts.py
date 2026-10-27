@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: AGPL-3.0-or-later
+# SPDX-License-Identifier: Apache-2.0
 # Copyright (C) 2026 the sE-pretix authors
 """Tests der reinen Font-Pipeline (ohne pretix). Echte Schrift optional via TITILLIUM_ZIP=/pfad/Titillium.zip."""
 import io

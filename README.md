@@ -36,8 +36,8 @@ python -m venv .venv && .venv/bin/pip install pytest fonttools brotli reportlab 
 
 ## Lizenz
 
-GNU Affero General Public License v3 oder später (siehe `LICENSE`). Das Plugin ist ein abgeleitetes Werk von pretix und
-steht deshalb ebenfalls unter der AGPL. Für den Betrieb von pretix gelten zusätzlich die
-[Zusatzbedingungen von pretix](https://github.com/pretix/pretix/blob/master/LICENSE).
+Apache License 2.0 (siehe `LICENSE`). Das Plugin darf frei genutzt, geändert und weitergegeben werden, auch kommerziell.
+pretix selbst steht unter der AGPL mit Zusatzbedingungen; wer pretix betreibt, muss deren Bedingungen einhalten
+(siehe [Lizenz-FAQ von pretix](https://docs.pretix.eu/trust/licensing/faq/)). Apache-2.0 ist dazu ausdrücklich verträglich.
 
 **Inoffiziell:** Dieses Projekt wird nicht vom pretix-Team entwickelt oder unterstützt. „pretix“ ist eine Marke von rami.io GmbH.
